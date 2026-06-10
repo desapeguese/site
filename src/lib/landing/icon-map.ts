@@ -1,0 +1,52 @@
+import {
+  Accessibility,
+  Award,
+  Calendar,
+  Footprints,
+  Facebook,
+  Heart,
+  Instagram,
+  Leaf,
+  MapPin,
+  MessageCircle,
+  Package,
+  Palette,
+  PawPrint,
+  Recycle,
+  Sparkles,
+  Sprout,
+  Users,
+  Utensils,
+  UtensilsCrossed,
+  Wrench,
+  Youtube,
+  type LucideIcon,
+} from "lucide-react";
+
+const landingIconMap: Record<string, LucideIcon> = {
+  Accessibility,
+  Award,
+  Calendar,
+  Facebook,
+  Footprints,
+  Heart,
+  Instagram,
+  Leaf,
+  MapPin,
+  MessageCircle,
+  Package,
+  Palette,
+  PawPrint,
+  Recycle,
+  Sparkles,
+  Sprout,
+  Users,
+  Utensils,
+  UtensilsCrossed,
+  Wrench,
+  Youtube,
+};
+
+export function getLandingIcon(icon: string | null | undefined): LucideIcon {
+  return icon ? landingIconMap[icon] ?? Leaf : Leaf;
+}

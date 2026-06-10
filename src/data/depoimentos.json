@@ -1,0 +1,29 @@
+[
+  {
+    "id": "dep-1",
+    "visible": true,
+    "nome": "Nome do Depoente 1",
+    "cargo": "Cargo",
+    "instituicao": "Instituição de apoio",
+    "texto": "Petrópolis merece estar na vanguarda da inteligência artificial. O novo supercomputador trará pesquisa, inovação e oportunidades para nossa cidade.",
+    "foto": null
+  },
+  {
+    "id": "dep-2",
+    "visible": true,
+    "nome": "Nome do Depoente 2",
+    "cargo": "Cargo",
+    "instituicao": "Instituição",
+    "texto": "O PBIA (Plano brasileiro de inteligência artificial) prevê infraestrutura de alta performance. Apoiar o abaixo-assinado é apoiar o futuro da nossa região.",
+    "foto": null
+  },
+  {
+    "id": "dep-3",
+    "visible": true,
+    "nome": "Nome do Depoente 3",
+    "cargo": "Cargo",
+    "instituicao": "Instituição",
+    "texto": "Educação, emprego e inclusão digital passam por investimento em IA. Assinar o abaixo-assinado é um gesto concreto por Petrópolis.",
+    "foto": null
+  }
+]

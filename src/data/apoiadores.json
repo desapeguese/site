@@ -1,0 +1,16 @@
+[
+  {
+    "id": "apo-1",
+    "visible": true,
+    "nome": "Instituição Apoiador 1",
+    "logoUrl": "/img/logo_certificado_biomob.svg",
+    "link": null
+  },
+  {
+    "id": "apo-2",
+    "visible": true,
+    "nome": "Instituição Apoiador 2",
+    "logoUrl": "/img/LOGO_INSTITUTO_BRANCA.png",
+    "link": null
+  }
+]

@@ -1,0 +1,566 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :focus {
+    outline: none !important;
+  }
+
+  :focus-visible {
+    outline: 1px solid hsl(var(--primary)) !important;
+    outline-offset: 2px !important;
+  }
+}
+
+/* Animação de aparição para cards (sem Reveal) */
+.animate-in-card {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.5s ease-out;
+}
+.animate-in-card.animate-in-card-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@layer {
+  * {
+    --story-dvh: 1dvh !important;
+    --story-page-vmin: min(var(--story-page-vw), var(--story-page-vh)) !important;
+    --story-page-vmax: max(var(--story-page-vw), var(--story-page-vh)) !important;
+    --story-100dvh: calc(var(--story-dvh, 1vh) * 100) !important;
+    --i-amphtml-story-desktop-one-panel-ratio: 69 / 116;
+    --i-amphtml-story-desktop-one-panel-responsive-margin: max(74px, 8.25vh);
+    --i-amphtml-story-desktop-one-panel-height: calc(
+      var(--story-100dvh) - var(--i-amphtml-story-desktop-one-panel-responsive-margin) * 2
+    );
+    --i-amphtml-story-desktop-one-panel-width: calc(
+      var(--i-amphtml-story-desktop-one-panel-height) * var(--i-amphtml-story-desktop-one-panel-ratio)
+    );
+    --i-amphtml-story-desktop-one-panel-border-radius: 20px;
+    --story-page-vw: calc(var(--i-amphtml-story-desktop-one-panel-width) * 0.01) !important;
+    --story-page-vh: calc(var(--i-amphtml-story-desktop-one-panel-height) * 0.01) !important;
+    --i-amphtml-story-desktop-one-panel-button-margin: max(
+      10px,
+      calc(50vw - 72px - var(--i-amphtml-story-desktop-one-panel-width) / 2)
+    );
+  }
+}
+
+@layer base {
+  :root {
+    --background: 36, 33%, 97%;
+    --background-hover: 0, 0%, 72%;
+    --foreground: 0, 0%, 9%;
+
+    /* Gradiente linear para cards */
+    --gradient-card-from: 152, 45%, 28%;
+    --gradient-card-to: 140, 35%, 40%;
+    --gradient-orange-from: 18, 54%, 55%;
+    --gradient-orange-to: 42, 85%, 55%;
+    --card: 50, 23%, 95%;
+    --card-secondary: 0, 0%, 33%;
+    --card-secondary-foreground: 36, 33%, 97%;
+    --card-gradient: 50, 23%, 95%;
+    --card-foreground: 0, 0%, 9%;
+    --popover: 50, 23%, 95%;
+    --popover-foreground: 0, 0%, 9%;
+
+    /* Cores Principais - Verde Escuro RGB(52, 104, 26) */
+    --primary: 100, 60%, 25%;
+    --primary-5: 100, 60%, 25%, 0.05;
+    --primary-10: 100, 60%, 25%, 0.1;
+    --primary-20: 100, 60%, 25%, 0.2;
+    --primary-30: 100, 60%, 25%, 0.3;
+    --primary-40: 100, 60%, 25%, 0.4;
+    --primary-50: 100, 60%, 25%, 0.5;
+    --primary-60: 100, 60%, 25%, 0.6;
+    --primary-70: 100, 60%, 25%, 0.7;
+    --primary-80: 100, 60%, 25%, 0.8;
+    --primary-90: 100, 60%, 25%, 0.9;
+    --primary-foreground: 50, 23%, 95%;
+    --primary-hover: 100, 55%, 30%;
+    --primary-dark: 100, 60%, 25%;
+    --primary-dark-background: 100, 60%, 25%;
+    --primary-light: 95, 40%, 60%;
+    --primary-lightest: 95, 35%, 85%;
+
+    /* Variáveis de marca - Verde Escuro */
+    --brand-primary-dark: 100, 60%, 25%;
+    --brand-primary-mid: 100, 55%, 30%;
+    --brand-primary-light: 95, 40%, 60%;
+    --brand-primary-lightest: 95, 35%, 85%;
+    --brand-primary-dark-10: 100, 60%, 25%, 0.1;
+
+    /* Cores Secundárias - Laranja RGB(241, 136, 21) */
+    --secondary: 30, 85%, 51%;
+    --secondary-5: 30, 85%, 51%, 0.05;
+    --secondary-10: 30, 85%, 51%, 0.1;
+    --secondary-20: 30, 85%, 51%, 0.2;
+    --secondary-30: 30, 85%, 51%, 0.3;
+    --secondary-40: 30, 85%, 51%, 0.4;
+    --secondary-50: 30, 85%, 51%, 0.5;
+    --secondary-60: 30, 85%, 51%, 0.6;
+    --secondary-70: 30, 85%, 51%, 0.7;
+    --secondary-80: 30, 85%, 51%, 0.8;
+    --secondary-90: 30, 85%, 51%, 0.9;
+    --secondary-foreground: 50, 23%, 95%;
+    --secondary-hover: 30, 90%, 45%;
+    --secondary-dark: 30, 90%, 45%;
+    --secondary-mid: 30, 85%, 51%;
+    --secondary-light: 30, 80%, 60%;
+    --secondary-lightest: 30, 50%, 90%;
+
+    /* Variáveis de marca - Laranja */
+    --brand-secondary-dark: 30, 90%, 45%;
+    --brand-secondary-mid: 30, 85%, 51%;
+    --brand-secondary-light: 30, 80%, 60%;
+    --brand-secondary-lightest: 30, 50%, 90%;
+
+    --terciary: 168, 38%, 35%;
+    --terciary-foreground: 50, 23%, 95%;
+    --terciary-hover: 168, 35%, 22%;
+    --quaternary: 85, 40%, 38%;
+    --quaternary-foreground: 50, 23%, 95%;
+    --quaternary-hover: 85, 45%, 28%;
+    --muted: 0, 0%, 88%;
+    --muted-foreground: 150, 31%, 25%;
+    --accent: 145, 42%, 48%;
+    --accent-foreground: 145, 55%, 18%;
+
+    --destructive: 0, 85%, 48%;
+    --destructive-5: 0, 80%, 55%, 0.05;
+    --destructive-10: 0, 80%, 55%, 0.1;
+    --destructive-20: 0, 80%, 55%, 0.2;
+    --destructive-30: 0, 80%, 55%, 0.3;
+    --destructive-40: 0, 80%, 55%, 0.4;
+    --destructive-50: 0, 80%, 55%, 0.5;
+    --destructive-60: 0, 80%, 55%, 0.6;
+    --destructive-70: 0, 80%, 55%, 0.7;
+    --destructive-80: 0, 80%, 55%, 0.8;
+    --destructive-90: 0, 80%, 55%, 0.9;
+    --destructive-foreground: 50, 23%, 95%;
+    --destructive-hover: 0, 90%, 28%;
+
+    --warning: 34, 100%, 45%;
+    --warning-5: 34, 100%, 45%, 0.05;
+    --warning-10: 34, 100%, 45%, 0.1;
+    --warning-20: 34, 100%, 45%, 0.2;
+    --warning-30: 34, 100%, 45%, 0.3;
+    --warning-40: 34, 100%, 45%, 0.4;
+    --warning-50: 34, 100%, 45%, 0.5;
+    --warning-60: 34, 100%, 45%, 0.6;
+    --warning-70: 34, 100%, 45%, 0.7;
+    --warning-80: 34, 100%, 45%, 0.8;
+    --warning-90: 34, 100%, 45%, 0.9;
+    --warning-foreground: 50, 23%, 95%;
+    --warning-hover: 34, 100%, 32%;
+
+    --info: 210, 60%, 32%;
+    --info-5: 210, 60%, 32%, 0.05;
+    --info-10: 210, 60%, 32%, 0.1;
+    --info-20: 210, 60%, 32%, 0.2;
+    --info-30: 210, 60%, 32%, 0.3;
+    --info-40: 210, 60%, 32%, 0.4;
+    --info-50: 210, 60%, 32%, 0.5;
+    --info-60: 210, 60%, 32%, 0.6;
+    --info-70: 210, 60%, 32%, 0.7;
+    --info-80: 210, 60%, 32%, 0.8;
+    --info-90: 210, 60%, 32%, 0.9;
+    --info-foreground: 50, 23%, 95%;
+    --info-hover: 210, 60%, 32%;
+
+    --success: 151, 86%, 28%;
+    --success-5: 151, 86%, 28%, 0.05;
+    --success-10: 151, 86%, 28%, 0.1;
+    --success-20: 151, 86%, 28%, 0.2;
+    --success-30: 151, 86%, 28%, 0.3;
+    --success-40: 151, 86%, 28%, 0.4;
+    --success-50: 151, 86%, 28%, 0.5;
+    --success-60: 151, 86%, 28%, 0.6;
+    --success-70: 151, 86%, 28%, 0.7;
+    --success-80: 151, 86%, 28%, 0.8;
+    --success-90: 151, 86%, 28%, 0.9;
+    --success-foreground: 50, 23%, 95%;
+    --success-hover: 151, 70%, 38%;
+
+    --border: 146, 18%, 23%;
+    --input: 0, 0%, 88%;
+    --ring: 145, 48%, 32%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    --icon-light: 50, 23%, 95%;
+
+    /* Cores dos Espaços Temáticos - Baseadas na paleta da marca */
+    /* Roxo RGB(92, 75, 155) */
+    --espacos-roxo-escuro: 250, 35%, 45%;
+    --espacos-roxo: 250, 35%, 45%;
+    /* Rosa RGB(228, 96, 149) */
+    --espacos-magenta: 340, 70%, 64%;
+    /* Verde Escuro RGB(52, 104, 26) */
+    --espacos-verde-escuro: 100, 60%, 25%;
+
+    /* Cores adicionais da paleta */
+    /* Rosa RGB(228, 96, 149) */
+    --brand-rosa: 340, 70%, 64%;
+    --brand-rosa-dark: 340, 75%, 55%;
+    --brand-rosa-light: 340, 65%, 75%;
+    /* Roxo RGB(92, 75, 155) */
+    --brand-roxo: 250, 35%, 45%;
+    --brand-roxo-dark: 250, 40%, 35%;
+    --brand-roxo-light: 250, 30%, 60%;
+    /* Azul RGB(95, 172, 217) */
+    --brand-azul: 200, 60%, 61%;
+    --brand-azul-dark: 200, 65%, 50%;
+    --brand-azul-light: 200, 55%, 75%;
+    /* Off-White RGB(225, 220, 219) */
+    --brand-off-white: 10, 2%, 87%;
+    /* Verde Médio RGB(146, 197, 110) */
+    --brand-verde-medio: 95, 40%, 60%;
+    /* Quaternário (usando Laranja) */
+    --brand-quaternary-mid: 30, 85%, 51%;
+  }
+
+  .dark {
+    --background: 0, 0%, 4%;
+    --background-hover: 0, 0%, 33%;
+    --foreground: 50, 23%, 95%;
+
+    /* Gradiente linear para cards - Verde Escuro para Verde Médio */
+    --gradient-card-from: 100, 60%, 25%;
+    --gradient-card-to: 95, 40%, 60%;
+    /* Gradiente laranja - Laranja RGB(241, 136, 21) */
+    --gradient-orange-from: 30, 90%, 45%;
+    --gradient-orange-to: 30, 85%, 51%;
+    --card: 0, 0%, 9%;
+    --card-gradient: 0, 0%, 0%, 0.3;
+    --card-foreground: 36, 33%, 97%;
+    --card-secondary: 0, 0%, 33%;
+    --card-secondary-foreground: 36, 33%, 97%;
+    --popover: 0, 0%, 4%;
+    --popover-foreground: 36, 33%, 97%;
+
+    /* Cores Principais - Verde Escuro RGB(52, 104, 26) - Dark Mode */
+    --primary: 100, 55%, 35%;
+    --primary-5: 100, 60%, 25%, 0.05;
+    --primary-10: 100, 60%, 25%, 0.1;
+    --primary-20: 100, 60%, 25%, 0.2;
+    --primary-30: 100, 60%, 25%, 0.3;
+    --primary-40: 100, 60%, 25%, 0.4;
+    --primary-50: 100, 60%, 25%, 0.5;
+    --primary-60: 100, 60%, 25%, 0.6;
+    --primary-70: 100, 60%, 25%, 0.7;
+    --primary-80: 100, 60%, 25%, 0.8;
+    --primary-90: 100, 60%, 25%, 0.9;
+    --primary-foreground: 50, 23%, 95%;
+    --primary-hover: 100, 55%, 40%;
+    --primary-dark: 100, 60%, 25%;
+    --primary-dark-background: 100, 60%, 25%;
+    --primary-light: 95, 40%, 60%;
+    --primary-lightest: 100, 60%, 25%;
+
+    /* Variáveis de marca - Verde Escuro - Dark Mode */
+    --brand-primary-dark: 100, 60%, 25%;
+    --brand-primary-mid: 100, 55%, 35%;
+    --brand-primary-light: 95, 40%, 60%;
+    --brand-primary-lightest: 95, 35%, 85%;
+    --brand-primary-dark-10: 100, 60%, 25%, 0.1;
+
+    /* Cores Secundárias - Laranja RGB(241, 136, 21) - Dark Mode */
+    --secondary: 30, 85%, 51%;
+    --secondary-5: 30, 85%, 51%, 0.05;
+    --secondary-10: 30, 85%, 51%, 0.1;
+    --secondary-20: 30, 85%, 51%, 0.2;
+    --secondary-30: 30, 85%, 51%, 0.3;
+    --secondary-40: 30, 85%, 51%, 0.4;
+    --secondary-50: 30, 85%, 51%, 0.5;
+    --secondary-60: 30, 85%, 51%, 0.6;
+    --secondary-70: 30, 85%, 51%, 0.7;
+    --secondary-80: 30, 85%, 51%, 0.8;
+    --secondary-90: 30, 85%, 51%, 0.9;
+    --secondary-foreground: 50, 23%, 95%;
+    --secondary-hover: 30, 90%, 45%;
+    --secondary-dark: 30, 90%, 45%;
+    --secondary-mid: 30, 85%, 51%;
+    --secondary-light: 30, 80%, 60%;
+    --secondary-lightest: 30, 50%, 20%;
+
+    /* Variáveis de marca - Laranja - Dark Mode */
+    --brand-secondary-dark: 30, 90%, 45%;
+    --brand-secondary-mid: 30, 85%, 51%;
+    --brand-secondary-light: 30, 80%, 60%;
+    --brand-secondary-lightest: 30, 50%, 20%;
+    --terciary: 168, 35%, 22%;
+    --terciary-foreground: 50, 23%, 95%;
+    --terciary-hover: 168, 42%, 50%;
+    --quaternary: 85, 45%, 28%;
+    --quaternary-foreground: 50, 23%, 95%;
+    --quaternary-hover: 85, 38%, 52%;
+    --muted: 0, 0%, 33%;
+    --muted-foreground: 0, 0%, 88%;
+    --accent: 145, 55%, 18%;
+    --accent-foreground: 145, 40%, 96%;
+
+    --destructive: 0, 90%, 28%;
+    --destructive-5: 0, 80%, 40%, 0.05;
+    --destructive-10: 0, 80%, 40%, 0.1;
+    --destructive-20: 0, 80%, 40%, 0.2;
+    --destructive-30: 0, 80%, 40%, 0.3;
+    --destructive-40: 0, 80%, 40%, 0.4;
+    --destructive-50: 0, 80%, 40%, 0.5;
+    --destructive-60: 0, 80%, 40%, 0.6;
+    --destructive-70: 0, 80%, 40%, 0.7;
+    --destructive-80: 0, 80%, 40%, 0.8;
+    --destructive-90: 0, 80%, 40%, 0.9;
+    --destructive-foreground: 36, 33%, 97%;
+    --destructive-hover: 0, 85%, 48%;
+
+    --warning: 34, 100%, 32%;
+    --warning-5: 34, 100%, 32%, 0.05;
+    --warning-10: 34, 100%, 32%, 0.1;
+    --warning-20: 34, 100%, 32%, 0.2;
+    --warning-30: 34, 100%, 32%, 0.3;
+    --warning-40: 34, 100%, 32%, 0.4;
+    --warning-50: 34, 100%, 32%, 0.5;
+    --warning-60: 34, 100%, 32%, 0.6;
+    --warning-70: 34, 100%, 32%, 0.7;
+    --warning-80: 34, 100%, 32%, 0.8;
+    --warning-90: 34, 100%, 32%, 0.9;
+    --warning-foreground: 36, 33%, 97%;
+    --warning-hover: 34, 100%, 45%;
+
+    --info: 210, 60%, 45%;
+    --info-5: 210, 60%, 45%, 0.05;
+    --info-10: 210, 60%, 45%, 0.1;
+    --info-20: 210, 60%, 45%, 0.2;
+    --info-30: 210, 60%, 45%, 0.3;
+    --info-40: 210, 60%, 45%, 0.4;
+    --info-50: 210, 60%, 45%, 0.5;
+    --info-60: 210, 60%, 45%, 0.6;
+    --info-70: 210, 60%, 45%, 0.7;
+    --info-80: 210, 60%, 45%, 0.8;
+    --info-90: 210, 60%, 45%, 0.9;
+    --info-foreground: 36, 33%, 97%;
+    --info-hover: 210, 60%, 45%;
+
+    --success: 151, 86%, 28%;
+    --success-5: 151, 86%, 28%, 0.05;
+    --success-10: 151, 86%, 28%, 0.1;
+    --success-20: 151, 86%, 28%, 0.2;
+    --success-30: 151, 86%, 28%, 0.3;
+    --success-40: 151, 86%, 28%, 0.4;
+    --success-50: 151, 86%, 28%, 0.5;
+    --success-60: 151, 86%, 28%, 0.6;
+    --success-70: 151, 86%, 28%, 0.7;
+    --success-80: 151, 86%, 28%, 0.8;
+    --success-90: 151, 86%, 28%, 0.9;
+    --success-foreground: 50, 23%, 95%;
+    --success-hover: 151, 70%, 38%;
+
+    --border: 146, 18%, 23%;
+    --input: 0, 0%, 33%;
+    --ring: 145, 42%, 48%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --neutral-darker: 0, 0%, 6%;
+
+    --icon-light: 50, 23%, 95%;
+
+    /* Cores dos Espaços Temáticos - Baseadas na paleta da marca - Dark Mode */
+    /* Roxo RGB(92, 75, 155) */
+    --espacos-roxo-escuro: 250, 35%, 45%;
+    --espacos-roxo: 250, 35%, 45%;
+    /* Rosa RGB(228, 96, 149) */
+    --espacos-magenta: 340, 70%, 64%;
+    /* Verde Escuro RGB(52, 104, 26) */
+    --espacos-verde-escuro: 100, 60%, 25%;
+  }
+
+  * {
+    -webkit-transition: background-color 0.3s linear;
+    -moz-transition: background-color 0.3s linear;
+    -o-transition: background-color 0.3s linear;
+    -ms-transition: background-color 0.3s linear;
+    transition: background-color 0.3s linear;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Scrollbar custom global para todos os elementos scrolláveis */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary)) hsl(var(--background));
+}
+
+/* Para navegadores baseados em Webkit */
+*::-webkit-scrollbar {
+  width: 0.5rem;
+}
+*::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary-hover));
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.container.collapsed {
+  --sidebar-width: 4.25rem;
+
+  @media (max-width: 480px) {
+    --sidebar-width: 0rem;
+  }
+}
+
+.header {
+  grid-area: header;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.main {
+  grid-area: main;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding-inline: 100px;
+}
+
+.blur-up {
+  filter: blur(5px);
+  transition: filter 0.3s ease-in-out;
+}
+
+.blur-up:not([data-loaded]) {
+  filter: blur(5px);
+}
+
+.blur-up[data-loaded] {
+  filter: blur(0);
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding-inline: 20px;
+  }
+}
+
+.custom-transform {
+  transform: none !important;
+  top: 100% !important;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 4px;
+  height: 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 4px;
+  height: 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+input[type="range"]::-ms-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+input[type="range"]::-ms-track {
+  background: #ffffff;
+  border-color: transparent;
+  color: transparent;
+}
+
+.rdp-vhidden {
+  @apply hidden;
+}
+
+/* Design system – landing (Lovable/Guia) */
+.bg-gradient-hero {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--brand-primary-dark)) 0%,
+    hsl(var(--brand-primary-mid)) 50%,
+    hsl(var(--brand-primary-light) / 0.9) 100%
+  );
+}
+.bg-gradient-earth {
+  background: linear-gradient(160deg, hsl(var(--brand-primary-dark-10)) 0%, hsl(var(--background)) 40%);
+}
+.bg-gradient-sunset {
+  background: linear-gradient(180deg, hsl(var(--brand-secondary-lightest)) 0%, hsl(var(--brand-primary-lightest)) 100%);
+}
+.bg-gradient-linear-card {
+  background: linear-gradient(180deg, hsl(var(--gradient-card-from)) 0%, hsl(var(--gradient-card-to)) 100%);
+}
+.bg-gradient-linear-orange {
+  background: linear-gradient(180deg, hsl(var(--gradient-orange-from)) 0%, hsl(var(--gradient-orange-to)) 100%);
+}
+.shadow-card {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+.shadow-elevated {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+.text-gold {
+  color: hsl(var(--brand-quaternary-mid));
+}

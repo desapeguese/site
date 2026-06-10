@@ -1,0 +1,37 @@
+[
+  {
+    "id": "ben-1",
+    "titulo": "Desenvolvimento econômico",
+    "descricao": "Atração de investimentos e empresas de tecnologia para a região."
+  },
+  {
+    "id": "ben-2",
+    "titulo": "Educação e formação",
+    "descricao": "Capacitação em IA para estudantes e profissionais locais."
+  },
+  {
+    "id": "ben-3",
+    "titulo": "Pesquisa e inovação",
+    "descricao": "Infraestrutura de alta performance para projetos de pesquisa."
+  },
+  {
+    "id": "ben-4",
+    "titulo": "Geração de empregos",
+    "descricao": "Novos postos de trabalho em tecnologia e áreas afins."
+  },
+  {
+    "id": "ben-5",
+    "titulo": "Startups e ecossistema",
+    "descricao": "Fomento ao empreendedorismo e à inovação local."
+  },
+  {
+    "id": "ben-6",
+    "titulo": "Governo e serviços públicos",
+    "descricao": "Uso de IA para melhorar a entrega de serviços à população."
+  },
+  {
+    "id": "ben-7",
+    "titulo": "Inclusão digital",
+    "descricao": "Democratização do acesso à tecnologia e à inteligência artificial."
+  }
+]

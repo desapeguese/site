@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String         @db.VarChar(120)
+  email         String         @unique @db.VarChar(160)
+  passwordHash  String         @map("password_hash")
+  role          Role           @default(MEMBER)
+  isActive      Boolean        @default(true) @map("is_active")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  refreshTokens RefreshToken[]
+  requestLogs   RequestLog[]
+  items         Item[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  jti        String   @unique
+  tokenHash  String   @map("token_hash")
+  expiresAt  DateTime @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model RequestLog {
+  id         String    @id @default(uuid())
+  userId     String?   @map("user_id")
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userEmail  String?   @map("user_email")
+  userName   String?   @map("user_name")
+  userRole   String?   @map("user_role")
+  route      String
+  method     String
+  statusCode Int       @map("status_code")
+  success    Boolean
+  payload    Json?
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([route])
+  @@index([userEmail])
+  @@index([userRole])
+  @@map("request_logs")
+}
+
+model Item {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(160)
+  description String?  @db.Text
+  createdById String   @map("created_by_id")
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([createdById])
+  @@index([createdAt])
+  @@map("items")
+}
+
+model LandingPage {
+  id             String           @id @default(uuid())
+  slug           String           @unique @db.VarChar(80)
+  locale         String           @default("pt-BR") @db.VarChar(16)
+  seoTitle       String           @map("seo_title") @db.VarChar(180)
+  seoDescription String           @map("seo_description") @db.Text
+  isActive       Boolean          @default(true) @map("is_active")
+  sections       LandingSection[]
+  assets         LandingAsset[]
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("landing_pages")
+}
+
+model LandingSection {
+  id            String        @id @default(uuid())
+  landingPageId String        @map("landing_page_id")
+  landingPage   LandingPage   @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  key           String        @db.VarChar(80)
+  type          String        @db.VarChar(80)
+  title         String?       @db.VarChar(240)
+  subtitle      String?       @db.VarChar(320)
+  description   String?       @db.Text
+  metadata      Json?
+  sortOrder     Int           @default(0) @map("sort_order")
+  isActive      Boolean       @default(true) @map("is_active")
+  items         LandingItem[]
+  assets        LandingAsset[]
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  @@unique([landingPageId, key])
+  @@index([landingPageId, sortOrder])
+  @@index([isActive])
+  @@map("landing_sections")
+}
+
+model LandingItem {
+  id          String         @id @default(uuid())
+  sectionId   String         @map("section_id")
+  section     LandingSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  key         String         @db.VarChar(100)
+  type        String         @db.VarChar(80)
+  title       String?        @db.VarChar(240)
+  subtitle    String?        @db.VarChar(320)
+  description String?        @db.Text
+  value       String?        @db.VarChar(80)
+  icon        String?        @db.VarChar(80)
+  color       String?        @db.VarChar(80)
+  url         String?        @db.Text
+  metadata    Json?
+  sortOrder   Int            @default(0) @map("sort_order")
+  isActive    Boolean        @default(true) @map("is_active")
+  assets      LandingAsset[]
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  @@unique([sectionId, key])
+  @@index([sectionId, sortOrder])
+  @@index([type])
+  @@index([isActive])
+  @@map("landing_items")
+}
+
+model LandingAsset {
+  id            String          @id @default(uuid())
+  landingPageId String          @map("landing_page_id")
+  landingPage   LandingPage     @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  sectionId     String?         @map("section_id")
+  section       LandingSection? @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  itemId        String?         @map("item_id")
+  item          LandingItem?    @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  key           String          @db.VarChar(120)
+  type          String          @db.VarChar(80)
+  theme         String?         @db.VarChar(20)
+  fileName      String          @map("file_name") @db.VarChar(220)
+  mimeType      String          @map("mime_type") @db.VarChar(80)
+  base64Data    String          @map("base64_data") @db.Text
+  altText       String          @map("alt_text") @db.VarChar(240)
+  sortOrder     Int             @default(0) @map("sort_order")
+  isActive      Boolean         @default(true) @map("is_active")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  @@unique([landingPageId, key])
+  @@index([landingPageId, sortOrder])
+  @@index([sectionId])
+  @@index([itemId])
+  @@index([isActive])
+  @@map("landing_assets")
+}
+
+model NewsletterSubscription {
+  id        String   @id @default(uuid())
+  email     String   @unique @db.VarChar(180)
+  source    String   @default("footer") @db.VarChar(80)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([createdAt])
+  @@index([isActive])
+  @@map("newsletter_subscriptions")
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "carta-1",
+    "visible": true,
+    "titulo": "Carta de apoio – Autoridade Municipal",
+    "autor": "Nome da autoridade",
+    "previewUrl": null,
+    "pdfUrl": "#",
+    "categoria": "autoridades"
+  },
+  {
+    "id": "carta-2",
+    "visible": true,
+    "titulo": "Carta de apoio – Instituição de ensino",
+    "autor": "Instituição",
+    "previewUrl": null,
+    "pdfUrl": "#",
+    "categoria": "instituicoes"
+  }
+]
