@@ -4,7 +4,7 @@ import { hashPassword } from "../src/server/auth/password";
 import { DEFAULT_LANDING_CONTENT } from "../src/server/landing/default-landing-content";
 import { readFrontendAssetAsBase64 } from "../src/server/landing/landing-assets";
 
-loadEnvFile();
+try { loadEnvFile(); } catch { /* env already loaded externally */ }
 
 const prisma = new PrismaClient();
 
