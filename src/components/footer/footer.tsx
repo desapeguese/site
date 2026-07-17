@@ -49,7 +49,7 @@ function fallbackFooterSection(): LandingSection {
 
 export const Footer = ({ section, editable = false }: FooterProps) => {
   const landingContent = useOptionalLandingContent();
-  const { accessToken } = useAdminMode();
+  const { accessToken, isAdmin } = useAdminMode();
   const activeSection = section ?? fallbackFooterSection();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -229,7 +229,7 @@ export const Footer = ({ section, editable = false }: FooterProps) => {
                         </a>
                       )}
                     </EditableSlot>
-                    {editable && (
+                    {editable && isAdmin && (
                       <button
                         type="button"
                         onClick={() => {
