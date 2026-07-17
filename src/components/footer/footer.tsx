@@ -265,7 +265,7 @@ export const Footer = ({ section, editable = false }: FooterProps) => {
                       key: `policy_link_${Date.now()}`,
                       type: "footer_link",
                       title: "Nova política",
-                      url: "#",
+                      url: null,
                       sortOrder: maxSortOrder + 1,
                     },
                     token
