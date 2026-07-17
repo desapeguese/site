@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail } from "lucide-react";
+import { Mail, X } from "lucide-react";
 import { toast } from "sonner";
+import { AdminAddItemButton } from "@/components/admin/AdminAddItemButton";
 import { AdminLinkEditor } from "@/components/admin/AdminLinkEditor";
 import { AdminSelectField } from "@/components/admin/AdminSelectField";
 import { EditableText } from "@/components/admin/EditableText";
 import { Button } from "@/components/ui/button";
+import { useAdminMode } from "@/context/AdminModeContext";
 import { useOptionalLandingContent } from "@/context/LandingContentContext";
 import { festivalApi } from "@/lib/api/festival-api";
 import { LANDING_ICON_OPTIONS, getMetadataString, mergeMetadata } from "@/lib/landing/admin-options";
@@ -47,6 +49,7 @@ function fallbackFooterSection(): LandingSection {
 
 export const Footer = ({ section, editable = false }: FooterProps) => {
   const landingContent = useOptionalLandingContent();
+  const { accessToken } = useAdminMode();
   const activeSection = section ?? fallbackFooterSection();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,6 +86,16 @@ export const Footer = ({ section, editable = false }: FooterProps) => {
   async function updateItem(item: LandingItem, payload: Record<string, unknown>, accessToken: string) {
     const updatedItem = await festivalApi.updateItem(item.id, payload, accessToken);
     landingContent?.replaceItem(updatedItem);
+  }
+
+  async function removePolicyLink(item: LandingItem, accessToken: string) {
+    try {
+      await festivalApi.removeItem(item.id, accessToken);
+      landingContent?.removeItem(item.id);
+      toast.success("Link removido.");
+    } catch {
+      toast.error("Não foi possível remover o link.");
+    }
   }
 
   async function handleNewsletterSubmit(event: React.FormEvent) {
@@ -199,22 +212,37 @@ export const Footer = ({ section, editable = false }: FooterProps) => {
             <ul className="space-y-3">
               {policyLinks.map((item) => (
                 <li key={item.id} className="flex flex-col items-start gap-2">
-                  <EditableSlot
-                    editable={editable}
-                    value={item.title ?? "Política"}
-                    onSave={(value, token) => updateItem(item, { title: value }, token)}
-                  >
-                    {(text) => (
-                      <a
-                        href={item.url ?? "#"}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="body-callout-light transition-colors hover:text-secondary"
+                  <div className="flex w-full items-center gap-2">
+                    <EditableSlot
+                      editable={editable}
+                      value={item.title ?? "Política"}
+                      onSave={(value, token) => updateItem(item, { title: value }, token)}
+                    >
+                      {(text) => (
+                        <a
+                          href={item.url ?? "#"}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="body-callout-light transition-colors hover:text-secondary"
+                        >
+                          {text}
+                        </a>
+                      )}
+                    </EditableSlot>
+                    {editable && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!accessToken) return;
+                          void removePolicyLink(item, accessToken);
+                        }}
+                        className="rounded-full p-1 text-destructive transition-colors hover:bg-destructive/10"
+                        aria-label={`Remover ${item.title ?? "política"}`}
                       >
-                        {text}
-                      </a>
+                        <X className="h-4 w-4" />
+                      </button>
                     )}
-                  </EditableSlot>
+                  </div>
                   {editable && (
                     <AdminLinkEditor
                       label={item.title ?? "Política"}
@@ -225,6 +253,27 @@ export const Footer = ({ section, editable = false }: FooterProps) => {
                 </li>
               ))}
             </ul>
+            {editable && (
+              <AdminAddItemButton
+                label="Adicionar link de política"
+                className="mt-4"
+                onCreate={async (token) => {
+                  const maxSortOrder = policyLinks.reduce((max, item) => Math.max(max, item.sortOrder), 0);
+                  const createdItem = await festivalApi.createItem(
+                    activeSection.id,
+                    {
+                      key: `policy_link_${Date.now()}`,
+                      type: "footer_link",
+                      title: "Nova política",
+                      url: "#",
+                      sortOrder: maxSortOrder + 1,
+                    },
+                    token
+                  );
+                  landingContent?.addItem(activeSection.id, createdItem);
+                }}
+              />
+            )}
           </div>
 
           <div>
