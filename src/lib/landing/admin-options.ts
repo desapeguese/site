@@ -64,6 +64,15 @@ export function getMetadataString(
   return typeof value === "string" && value.length > 0 ? value : fallback;
 }
 
+export function getMetadataBoolean(
+  metadata: Record<string, unknown> | null | undefined,
+  key: string,
+  fallback: boolean
+): boolean {
+  const value = metadata?.[key];
+  return typeof value === "boolean" ? value : fallback;
+}
+
 export function mergeMetadata(
   metadata: Record<string, unknown> | null | undefined,
   patch: Record<string, unknown>

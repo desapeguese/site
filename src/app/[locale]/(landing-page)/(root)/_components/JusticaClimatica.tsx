@@ -4,13 +4,19 @@ import { AnimateIn } from "@/components/AnimateIn";
 import { AdminAddItemButton } from "@/components/admin/AdminAddItemButton";
 import { AdminLinkEditor } from "@/components/admin/AdminLinkEditor";
 import { AdminSelectField } from "@/components/admin/AdminSelectField";
+import { AdminToggleField } from "@/components/admin/AdminToggleField";
 import { EditableCardToolbar } from "@/components/admin/EditableCardToolbar";
 import { EditableText } from "@/components/admin/EditableText";
 import { buttonVariants } from "@/components/ui/button";
 import { useAdminMode } from "@/context/AdminModeContext";
 import { useLandingContent } from "@/context/LandingContentContext";
 import { festivalApi } from "@/lib/api/festival-api";
-import { LANDING_ICON_OPTIONS, THEMATIC_SPACE_COLOR_OPTIONS } from "@/lib/landing/admin-options";
+import {
+  LANDING_ICON_OPTIONS,
+  THEMATIC_SPACE_COLOR_OPTIONS,
+  getMetadataBoolean,
+  mergeMetadata,
+} from "@/lib/landing/admin-options";
 import { getFallbackSection } from "@/lib/landing/default-content";
 import { getLandingIcon } from "@/lib/landing/icon-map";
 import type { LandingItem, LandingSection } from "@/lib/landing/types";
@@ -28,7 +34,7 @@ function getThematicColor(color: string | null | undefined): string {
 
 export const JusticaClimatica = ({ section }: { section?: LandingSection }) => {
   const { addItem, removeItem, replaceItem, replaceItems, replaceSection } = useLandingContent();
-  const { accessToken } = useAdminMode();
+  const { accessToken, isAdmin } = useAdminMode();
   const activeSection = section ?? getFallbackSection("programacao");
   const programEvents =
     activeSection?.items.filter((item) => item.type === "program_event").sort((a, b) => a.sortOrder - b.sortOrder) ??
@@ -37,6 +43,7 @@ export const JusticaClimatica = ({ section }: { section?: LandingSection }) => {
     activeSection?.items.filter((item) => item.type === "thematic_space").sort((a, b) => a.sortOrder - b.sortOrder) ??
     [];
   const ctaLink = activeSection?.items.find((item) => item.type === "cta_link");
+  const ctaEnabled = getMetadataBoolean(ctaLink?.metadata, "ctaEnabled", true);
 
   const updateSection = async (payload: Record<string, unknown>, token: string) => {
     if (!activeSection) return;
@@ -274,7 +281,24 @@ export const JusticaClimatica = ({ section }: { section?: LandingSection }) => {
           }}
         />
 
-        {ctaLink && (
+        {ctaLink && isAdmin && (
+          <div className="mt-4 w-full max-w-sm">
+            <AdminToggleField
+              label="Mostrar botão de ingresso"
+              value={ctaEnabled}
+              onChange={async (next, token) => {
+                const updated = await festivalApi.updateItem(
+                  ctaLink.id,
+                  { metadata: mergeMetadata(ctaLink.metadata, { ctaEnabled: next }) },
+                  token
+                );
+                replaceItem(updated);
+              }}
+            />
+          </div>
+        )}
+
+        {ctaLink && ctaEnabled && (
           <div className="mt-8 flex flex-col items-center gap-3">
             {ctaLink.url ? (
               <EditableText

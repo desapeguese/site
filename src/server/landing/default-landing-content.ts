@@ -779,6 +779,7 @@ export const DEFAULT_LANDING_CONTENT: DefaultLandingContent = {
           type: 'cta_link',
           title: 'Retire seu ingresso',
           url: 'https://www.sympla.com.br/evento/festival-desapegue-se-124-edicao/3286556?algoliaID=911c8b4edb80ca5ae4f88b16dcf90bd2&share_id=copiarlink',
+          metadata: { ctaEnabled: true },
           sortOrder: 30,
         },
       ],
