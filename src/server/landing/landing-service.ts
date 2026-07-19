@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { prisma } from "@/server/db/prisma";
 import { ApiError } from "@/server/http/api-error";
 import {
@@ -14,6 +15,13 @@ import {
 } from "./landing-types";
 import { normalizeBase64Image } from "./landing-assets";
 import { restoreDefaultLandingContent } from "./default-landing-restore";
+
+const LANDING_CACHE_TAG = "landing:default";
+const LANDING_CACHE_TTL_SECONDS = 3600;
+
+function invalidateLandingCache(): void {
+  revalidateTag(LANDING_CACHE_TAG, "default");
+}
 
 type LandingAssetRecord = {
   id: string;
@@ -127,17 +135,25 @@ function mapMetadata(metadata: unknown): Record<string, unknown> | null {
 }
 
 async function getDefaultPage(): Promise<LandingPagePayload> {
-  const page = await prisma.landingPage.findUnique({
-    where: { slug: "default" },
-    include: DEFAULT_PAGE_INCLUDE,
-  });
-
-  if (!page || !page.isActive) {
-    throw new ApiError(404, "Default landing page not found.");
-  }
-
-  return mapPage(page);
+  return getCachedDefaultPage();
 }
+
+const getCachedDefaultPage = unstable_cache(
+  async (): Promise<LandingPagePayload> => {
+    const page = await prisma.landingPage.findUnique({
+      where: { slug: "default" },
+      include: DEFAULT_PAGE_INCLUDE,
+    });
+
+    if (!page || !page.isActive) {
+      throw new ApiError(404, "Default landing page not found.");
+    }
+
+    return mapPage(page);
+  },
+  [LANDING_CACHE_TAG],
+  { tags: [LANDING_CACHE_TAG], revalidate: LANDING_CACHE_TTL_SECONDS }
+);
 
 async function updateDefaultPage(input: UpdateLandingPageInput): Promise<LandingPagePayload> {
   await ensureDefaultPageExists();
@@ -152,11 +168,13 @@ async function updateDefaultPage(input: UpdateLandingPageInput): Promise<Landing
     include: DEFAULT_PAGE_INCLUDE,
   });
 
+  invalidateLandingCache();
   return mapPage(page);
 }
 
 async function restoreDefaultPage(): Promise<LandingPagePayload> {
   await restoreDefaultLandingContent();
+  invalidateLandingCache();
   return getDefaultPage();
 }
 
@@ -185,6 +203,7 @@ async function updateSection(id: string, input: UpdateLandingSectionInput): Prom
     },
   });
 
+  invalidateLandingCache();
   return mapSection(section);
 }
 
@@ -212,6 +231,7 @@ async function createItem(sectionId: string, input: CreateLandingItemInput): Pro
     },
   });
 
+  invalidateLandingCache();
   return mapItem(item);
 }
 
@@ -237,6 +257,7 @@ async function updateItem(id: string, input: UpdateLandingItemInput): Promise<La
     },
   });
 
+  invalidateLandingCache();
   return mapItem(item);
 }
 
@@ -246,6 +267,7 @@ async function removeItem(id: string): Promise<void> {
     where: { id },
     data: { isActive: false },
   });
+  invalidateLandingCache();
 }
 
 async function updateAsset(id: string, input: UpdateLandingAssetInput): Promise<LandingAssetPayload> {
@@ -281,6 +303,7 @@ async function updateAsset(id: string, input: UpdateLandingAssetInput): Promise<
     },
   });
 
+  invalidateLandingCache();
   return mapAsset(asset);
 }
 
