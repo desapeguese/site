@@ -1,0 +1,10 @@
+{
+  "name": "desapeguese-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Festival Desapegue-se — static site hosted on Wix Headless",
+  "scripts": {
+    "build": "rm -rf dist && mkdir -p dist && cp index.html dist/index.html",
+    "release": "npm run build && wix release"
+  }
+}
