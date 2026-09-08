@@ -1,7 +1,9 @@
 # Festival Desapegue-se — Wix Headless site
 
-The live site is hosted on **Wix**. There is no database and no Vercel
-deployment; the previous Next.js/Prisma application is not part of this branch.
+Live at **https://www.festivaldesapeguese.com.br/**, hosted on **Wix**
+(site id `cdc2b22d-e3f7-4684-a910-5811ec8084a4`). There is no database and no
+Vercel deployment; the previous Next.js/Prisma application is not part of this
+branch.
 
 ## Layout
 
