@@ -5,6 +5,7 @@
   "description": "Festival Desapegue-se — static site hosted on Wix Headless",
   "scripts": {
     "build": "rm -rf dist && mkdir -p dist && cp index.html dist/index.html",
-    "release": "npm run build && wix release"
+    "release": "npm run build && CI=1 npx @wix/cli@latest release",
+    "login": "npx @wix/cli@latest login"
   }
 }
